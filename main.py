@@ -29,3 +29,31 @@ if landmark_points:
                 screen_x = screen_w * landmark.x * mouse_sensitivity
                 screen_y = screen_h * landmark.y * mouse_sensitivity
                 pyautogui.moveTo(screen_x, screen_y)
+
+ # Left click detection using eye aspect ratio
+        left = [landmarks[145], landmarks[159]]
+        for landmark in left:
+            x = int(landmark.x * frame_w)
+            y = int(landmark.y * frame_h)
+            cv2.circle(frame, (x, y), 3, (0, 255, 255), -1)
+        
+        # Perform left click if the difference between specific landmarks is small
+        if (left[0].y - left[1].y) < 0.004:
+            pyautogui.click()
+            pyautogui.sleep(1)
+
+  # Right click detection using eyebrow raise
+        right_eyebrow = [landmarks[336], landmarks[296]]
+        for landmark in right_eyebrow:
+            x = int(landmark.x * frame_w)
+            y = int(landmark.y * frame_h)
+            cv2.circle(frame, (x, y), 3, (255, 0, 0), -1)
+        
+        # Perform right click if the difference between specific landmarks is large
+        if (right_eyebrow[0].y - right_eyebrow[1].y) > 0.02:
+            pyautogui.rightClick()
+            pyautogui.sleep(1)
+
+    cv2.imshow('Eye Controlled Mouse', frame)
+    if cv2.waitKey(1) & 0xFF == ord('q'):
+        break
