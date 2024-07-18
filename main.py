@@ -17,7 +17,8 @@ while True:
     output = face_mesh.process(rgb_frame)
     landmark_points = output.multi_face_landmarks
     frame_h, frame_w, _ = frame.shape
-if landmark_points:
+
+    if landmark_points:
         landmarks = landmark_points[0].landmark
 
         # Control mouse movement using eye landmarks
@@ -30,7 +31,7 @@ if landmark_points:
                 screen_y = screen_h * landmark.y * mouse_sensitivity
                 pyautogui.moveTo(screen_x, screen_y)
 
- # Left click detection using eye aspect ratio
+        # Left click detection using eye aspect ratio
         left = [landmarks[145], landmarks[159]]
         for landmark in left:
             x = int(landmark.x * frame_w)
@@ -42,7 +43,7 @@ if landmark_points:
             pyautogui.click()
             pyautogui.sleep(1)
 
-  # Right click detection using eyebrow raise
+        # Right click detection using eyebrow raise
         right_eyebrow = [landmarks[336], landmarks[296]]
         for landmark in right_eyebrow:
             x = int(landmark.x * frame_w)
@@ -57,3 +58,7 @@ if landmark_points:
     cv2.imshow('Eye Controlled Mouse', frame)
     if cv2.waitKey(1) & 0xFF == ord('q'):
         break
+
+cam.release()
+cv2.destroyAllWindows()
+
